@@ -3,7 +3,8 @@ import { ApiError } from "../utils/ApiError.js"
 import { User } from "../models/user.model.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { decode, jwt } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 // generate access and refresh token
 const generateAccessAndRefreshToken = async (userId) => {
@@ -152,8 +153,8 @@ const logoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
-            $set: {
-                refreshToken: undefined,
+            $unset: {
+                refreshToken: 1,  // this remove the field from document
             }
         },
         {
@@ -365,13 +366,13 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
                     $size: "$subscribers"
                 },
                 channelsSubscribedToCount: {
-                    $size: "subscribedTo"
+                    $size: "$subscribedTo"
                 },
                 isSubscribed: {
                     $cond: {
                         if: { $in: [req.user?._id, "$subscribers.subscriber"] },
                         then: true,
-                        else: true,
+                        else: false,
                     }
                 }
             }
