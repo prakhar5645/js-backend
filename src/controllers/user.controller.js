@@ -284,6 +284,14 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Error while uploading on avatar")
     }
 
+    const avatarUrl = req.user?.avatar;
+
+    if (!avatarUrl) {
+        throw new ApiError(400, "Couldn't find Public ID of old Avatar");
+    }
+
+    await deleteFromCloudinary(avatarUrl);
+
     const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
@@ -313,6 +321,14 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
     if (!coverImage.url) {
         throw new ApiError(400, "Error while uploading on cover image")
     }
+
+    const coverImageUrl = req.user?.coverImage;
+
+    if (!coverImageUrl) {
+        throw new ApiError(400, "Couldn't find Public ID of old coverImage");
+    }
+
+    await deleteFromCloudinary(coverImageUrl);
 
     const user = await User.findByIdAndUpdate(
         req.user?._id,
