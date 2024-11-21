@@ -371,9 +371,11 @@ const getSubscribedVideos = asyncHandler(async (req, res) => {
     const videos = await Video.aggregate([
         {
             $match: {
-                owner: channelIds.map(
-                    (id) => new mongoose.Types.ObjectId(id),
-                ),
+                owner: {
+                    $in: channelIds.map(
+                        (id) => new mongoose.Types.ObjectId(id),
+                    ),
+                }
             },
         },
         {
