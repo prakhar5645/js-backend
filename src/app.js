@@ -24,6 +24,8 @@ import subscriptionRouter from "./routes/subscription.routes.js";
 import likeRouter from "./routes/like.routes.js";
 import playlistRouter from "./routes/playlist.routes.js";
 import tweetRouter from "./routes/tweet.routes.js";
+import dashboardRouter from "./routes/dashboard.routes.js";
+import healthcheckRouter from "./routes/healthCheck.routes.js";
 
 app.get("/", (req, res) => res.send("Backend of frontend"));
 
@@ -35,6 +37,8 @@ app.use("/api/v1/subscriptions", subscriptionRouter);
 app.use("/api/v1/likes", likeRouter);
 app.use("/api/v1/playlist", playlistRouter);
 app.use("/api/v1/tweets", tweetRouter);
+app.use("/api/v1/dashboard", dashboardRouter);
+app.use("/api/v1/healthcheck", healthcheckRouter);
 
 // export default app;
 export { app }; 
